@@ -1,7 +1,21 @@
 const express = require("express");
-const { register } = require("../controllers/authController");
+const { body } = require("express-validator");
+const { register, login } = require("../controllers/authController");
 
 const router = express.Router();
-router.post("/register", register);
+
+router.post(
+  "/register",
+  body("email").isEmail(),
+  body("password").isLength({ min: 8}),
+  register
+);
+
+router.post(
+  "/login",
+  body("email").isEmail(),
+  body("password").exists(),
+  login
+);
 
 module.exports = router;
